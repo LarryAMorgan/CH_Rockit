@@ -6,81 +6,9 @@
         <meta name="viewport" content="initial-scale=1,user-scalable=no,maximum-scale=1,width=device-width">
         <meta name="mobile-web-app-capable" content="yes">
         <meta name="apple-mobile-web-app-capable" content="yes">
-        <link rel="stylesheet" href="./resources/ol.css">
-        <link rel="stylesheet" href="resources/fontawesome-all.min.css">
-        <link rel="stylesheet" href="./resources/ol-layerswitcher.css">
-        <link rel="stylesheet" href="./resources/qgis2web.css">
-        <style>
-        .ol-geocoder.gcd-gl-container {
-            top: 100px!important;
-            left: .5em!important;
-            width: 2.1em!important;
-            height: 2.1em!important;
-        }
-        .ol-geocoder .gcd-gl-container{
-            width: 2.1em!important;
-            height: 2.1em!important;
-        }
-        .ol-geocoder .gcd-gl-control{
-            width: 2.1em!important;
-        }
-        .ol-geocoder .gcd-gl-expanded {
-            width: 15.625em!important;
-            height: 2.1875em;
-        }
-        .ol-touch .ol-geocoder.gcd-gl-container{
-            top: 130px!important;
-        }
-        .ol-geocoder .gcd-gl-btn {
-            width: 1.375em!important;
-            height: 1.375em!important;
-            top: .225em!important;
-            background-image: none!important;
-        }
-        </style>
-<style>
-.search-layer {
-  top: 135px;
-  left: .5em;
-}
-.ol-touch .search-layer {
-  top: 180px;
-}
-</style>
-        <style>
-        html, body {
-            background-color: #ffffff;
-        }
-        .ol-control button {
-            background-color: #f8f8f8 !important;
-            color: #000000 !important;
-            border-radius: 0px !important;
-        }
-        .ol-zoom, .geolocate, .gcd-gl-control .ol-control {
-            background-color: rgba(255,255,255,.4) !important;
-            padding: 3px !important;
-        }
-        .ol-scale-line {
-            background: none !important;
-        }
-        .ol-scale-line-inner {
-            border: 2px solid #f8f8f8 !important;
-            border-top: none !important;
-            background: rgba(255, 255, 255, 0.5) !important;
-            color: black !important;
-        }
-        </style>
-
-        <style>
-        .geolocate {
-            top: 65px;
-            left: .5em;
-        }
-        .ol-touch .geolocate {
-            top: 80px;
-        }
-        </style>
-        <link href="resources/ol-geocoder.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="css/leaflet.css"><link rel="stylesheet" href="css/L.Control.Locate.min.css">
+        <link rel="stylesheet" href="css/qgis2web.css"><link rel="stylesheet" href="css/fontawesome-all.min.css">
+        <link rel="stylesheet" href="css/leaflet-control-geocoder.Geocoder.css">
         <style>
         html, body, #map {
             width: 100%;
@@ -93,21 +21,410 @@
     </head>
     <body>
         <div id="map">
-            <div id="popup" class="ol-popup">
-                <a href="#" id="popup-closer" class="ol-popup-closer"></a>
-                <div id="popup-content"></div>
-            </div>
         </div>
-        <script src="resources/qgis2web_expressions.js"></script>
-        <script src="resources/polyfills.js"></script>
-        <script src="./resources/functions.js"></script>
-        <script src="./resources/ol.js"></script>
-        <script src="./resources/ol-layerswitcher.js"></script>
-        <script src="resources/ol-geocoder.js"></script>
-        <script src="layers/Manzana2_1.js"></script><script src="layers/Manzana1_2.js"></script><script src="layers/Longlands_3.js"></script>
-        <script src="styles/Manzana2_1_style.js"></script><script src="styles/Manzana1_2_style.js"></script><script src="styles/Longlands_3_style.js"></script>
-        <script src="./layers/layers.js" type="text/javascript"></script> 
-        <script src="./resources/Autolinker.min.js"></script>
-        <script src="./resources/qgis2web.js"></script>
+        <script src="js/qgis2web_expressions.js"></script>
+        <script src="js/leaflet.js"></script><script src="js/L.Control.Locate.min.js"></script>
+        <script src="js/leaflet.rotatedMarker.js"></script>
+        <script src="js/leaflet.pattern.js"></script>
+        <script src="js/leaflet-hash.js"></script>
+        <script src="js/Autolinker.min.js"></script>
+        <script src="js/rbush.min.js"></script>
+        <script src="js/labelgun.min.js"></script>
+        <script src="js/labels.js"></script>
+        <script src="js/leaflet-control-geocoder.Geocoder.js"></script>
+        <script src="data/Manzana2_1.js"></script>
+        <script src="data/Manzana1_2.js"></script>
+        <script src="data/Longlandsboundary_3.js"></script>
+        <script src="data/Blocks_4.js"></script>
+        <script src="data/Productionareas_5.js"></script>
+        <script src="data/Codlingtraps_6.js"></script>
+        <script src="data/Cankersites_7.js"></script>
+        <script>
+        var map = L.map('map', {
+            zoomControl:true, maxZoom:28, minZoom:1
+        }).fitBounds([[-39.67824287266195,176.7996313833696],[-39.666844080171444,176.82420343076777]]);
+        var hash = new L.Hash(map);
+        map.attributionControl.setPrefix('<a href="https://github.com/tomchadwin/qgis2web" target="_blank">qgis2web</a> &middot; <a href="https://leafletjs.com" title="A JS library for interactive maps">Leaflet</a> &middot; <a href="https://qgis.org">QGIS</a>');
+        var autolinker = new Autolinker({truncate: {length: 30, location: 'smart'}});
+        L.control.locate({locateOptions: {maxZoom: 19}}).addTo(map);
+        var bounds_group = new L.featureGroup([]);
+        function setBounds() {
+        }
+        map.createPane('pane_ESRIImagery_0');
+        map.getPane('pane_ESRIImagery_0').style.zIndex = 400;
+        var layer_ESRIImagery_0 = L.tileLayer('https://server.arcgisonline.com/arcgis/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+            pane: 'pane_ESRIImagery_0',
+            opacity: 1.0,
+            attribution: '',
+            minZoom: 1,
+            maxZoom: 28,
+            minNativeZoom: 0,
+            maxNativeZoom: 22
+        });
+        layer_ESRIImagery_0;
+        map.addLayer(layer_ESRIImagery_0);
+        function pop_Manzana2_1(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['FID'] !== null ? autolinker.link(feature.properties['FID'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_Manzana2_1_0() {
+            return {
+                pane: 'pane_Manzana2_1',
+                opacity: 1,
+                color: 'rgba(221,34,174,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 2.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+        }
+        map.createPane('pane_Manzana2_1');
+        map.getPane('pane_Manzana2_1').style.zIndex = 401;
+        map.getPane('pane_Manzana2_1').style['mix-blend-mode'] = 'normal';
+        var layer_Manzana2_1 = new L.geoJson(json_Manzana2_1, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_Manzana2_1',
+            layerName: 'layer_Manzana2_1',
+            pane: 'pane_Manzana2_1',
+            onEachFeature: pop_Manzana2_1,
+            style: style_Manzana2_1_0,
+        });
+        bounds_group.addLayer(layer_Manzana2_1);
+        map.addLayer(layer_Manzana2_1);
+        function pop_Manzana1_2(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['FID'] !== null ? autolinker.link(feature.properties['FID'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_Manzana1_2_0() {
+            return {
+                pane: 'pane_Manzana1_2',
+                opacity: 1,
+                color: 'rgba(221,34,174,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 2.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+        }
+        map.createPane('pane_Manzana1_2');
+        map.getPane('pane_Manzana1_2').style.zIndex = 402;
+        map.getPane('pane_Manzana1_2').style['mix-blend-mode'] = 'normal';
+        var layer_Manzana1_2 = new L.geoJson(json_Manzana1_2, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_Manzana1_2',
+            layerName: 'layer_Manzana1_2',
+            pane: 'pane_Manzana1_2',
+            onEachFeature: pop_Manzana1_2,
+            style: style_Manzana1_2_0,
+        });
+        bounds_group.addLayer(layer_Manzana1_2);
+        map.addLayer(layer_Manzana1_2);
+        function pop_Longlandsboundary_3(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['id'] !== null ? autolinker.link(feature.properties['id'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_Longlandsboundary_3_0() {
+            return {
+                pane: 'pane_Longlandsboundary_3',
+                opacity: 1,
+                color: 'rgba(221,34,174,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 2.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+        }
+        map.createPane('pane_Longlandsboundary_3');
+        map.getPane('pane_Longlandsboundary_3').style.zIndex = 403;
+        map.getPane('pane_Longlandsboundary_3').style['mix-blend-mode'] = 'normal';
+        var layer_Longlandsboundary_3 = new L.geoJson(json_Longlandsboundary_3, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_Longlandsboundary_3',
+            layerName: 'layer_Longlandsboundary_3',
+            pane: 'pane_Longlandsboundary_3',
+            onEachFeature: pop_Longlandsboundary_3,
+            style: style_Longlandsboundary_3_0,
+        });
+        bounds_group.addLayer(layer_Longlandsboundary_3);
+        map.addLayer(layer_Longlandsboundary_3);
+        function pop_Blocks_4(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['id'] !== null ? autolinker.link(feature.properties['id'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['Name'] !== null ? autolinker.link(feature.properties['Name'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['Area'] !== null ? autolinker.link(feature.properties['Area'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_Blocks_4_0() {
+            return {
+                pane: 'pane_Blocks_4',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(232,113,141,1.0)',
+                interactive: true,
+            }
+        }
+        map.createPane('pane_Blocks_4');
+        map.getPane('pane_Blocks_4').style.zIndex = 404;
+        map.getPane('pane_Blocks_4').style['mix-blend-mode'] = 'normal';
+        var layer_Blocks_4 = new L.geoJson(json_Blocks_4, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_Blocks_4',
+            layerName: 'layer_Blocks_4',
+            pane: 'pane_Blocks_4',
+            onEachFeature: pop_Blocks_4,
+            style: style_Blocks_4_0,
+        });
+        bounds_group.addLayer(layer_Blocks_4);
+        map.addLayer(layer_Blocks_4);
+        function pop_Productionareas_5(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['id'] !== null ? autolinker.link(feature.properties['id'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['Name'] !== null ? autolinker.link(feature.properties['Name'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['Area'] !== null ? autolinker.link(feature.properties['Area'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_Productionareas_5_0() {
+            return {
+                pane: 'pane_Productionareas_5',
+                opacity: 1,
+                color: 'rgba(31,120,180,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 4.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+        }
+        map.createPane('pane_Productionareas_5');
+        map.getPane('pane_Productionareas_5').style.zIndex = 405;
+        map.getPane('pane_Productionareas_5').style['mix-blend-mode'] = 'normal';
+        var layer_Productionareas_5 = new L.geoJson(json_Productionareas_5, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_Productionareas_5',
+            layerName: 'layer_Productionareas_5',
+            pane: 'pane_Productionareas_5',
+            onEachFeature: pop_Productionareas_5,
+            style: style_Productionareas_5_0,
+        });
+        bounds_group.addLayer(layer_Productionareas_5);
+        map.addLayer(layer_Productionareas_5);
+        function pop_Codlingtraps_6(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['id'] !== null ? autolinker.link(feature.properties['id'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['Name'] !== null ? autolinker.link(feature.properties['Name'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_Codlingtraps_6_0() {
+            return {
+                pane: 'pane_Codlingtraps_6',
+                radius: 8.0,
+                opacity: 1,
+                color: 'rgba(179,92,21,0.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 2.0,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(229,255,54,1.0)',
+                interactive: true,
+            }
+        }
+        map.createPane('pane_Codlingtraps_6');
+        map.getPane('pane_Codlingtraps_6').style.zIndex = 406;
+        map.getPane('pane_Codlingtraps_6').style['mix-blend-mode'] = 'normal';
+        var layer_Codlingtraps_6 = new L.geoJson(json_Codlingtraps_6, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_Codlingtraps_6',
+            layerName: 'layer_Codlingtraps_6',
+            pane: 'pane_Codlingtraps_6',
+            onEachFeature: pop_Codlingtraps_6,
+            pointToLayer: function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.circleMarker(latlng, style_Codlingtraps_6_0(feature));
+            },
+        });
+        bounds_group.addLayer(layer_Codlingtraps_6);
+        map.addLayer(layer_Codlingtraps_6);
+        function pop_Cankersites_7(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['id'] !== null ? autolinker.link(feature.properties['id'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['Name'] !== null ? autolinker.link(feature.properties['Name'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_Cankersites_7_0() {
+            return {
+                pane: 'pane_Cankersites_7',
+                radius: 4.0,
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(227,26,28,1.0)',
+                interactive: true,
+            }
+        }
+        map.createPane('pane_Cankersites_7');
+        map.getPane('pane_Cankersites_7').style.zIndex = 407;
+        map.getPane('pane_Cankersites_7').style['mix-blend-mode'] = 'normal';
+        var layer_Cankersites_7 = new L.geoJson(json_Cankersites_7, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_Cankersites_7',
+            layerName: 'layer_Cankersites_7',
+            pane: 'pane_Cankersites_7',
+            onEachFeature: pop_Cankersites_7,
+            pointToLayer: function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.circleMarker(latlng, style_Cankersites_7_0(feature));
+            },
+        });
+        bounds_group.addLayer(layer_Cankersites_7);
+        map.addLayer(layer_Cankersites_7);
+            var title = new L.Control();
+            title.onAdd = function (map) {
+                this._div = L.DomUtil.create('div', 'info');
+                this.update();
+                return this._div;
+            };
+            title.update = function () {
+                this._div.innerHTML = '<h2>CH Rockit Blocks 2023</h2>';
+            };
+            title.addTo(map);
+        var osmGeocoder = new L.Control.Geocoder({
+            collapsed: true,
+            position: 'topleft',
+            text: 'Search',
+            title: 'Testing'
+        }).addTo(map);
+        document.getElementsByClassName('leaflet-control-geocoder-icon')[0]
+        .className += ' fa fa-search';
+        document.getElementsByClassName('leaflet-control-geocoder-icon')[0]
+        .title += 'Search for a place';
+        var baseMaps = {};
+        L.control.layers(baseMaps,{'<img src="legend/Cankersites_7.png" /> Canker sites': layer_Cankersites_7,'<img src="legend/Codlingtraps_6.png" /> Codling traps': layer_Codlingtraps_6,'<img src="legend/Productionareas_5.png" /> Production areas': layer_Productionareas_5,'<img src="legend/Blocks_4.png" /> Blocks': layer_Blocks_4,'<img src="legend/Longlandsboundary_3.png" /> Longlands boundary': layer_Longlandsboundary_3,'<img src="legend/Manzana1_2.png" /> Manzana1': layer_Manzana1_2,'<img src="legend/Manzana2_1.png" /> Manzana2': layer_Manzana2_1,"ESRI Imagery": layer_ESRIImagery_0,}).addTo(map);
+        setBounds();
+        var i = 0;
+        layer_Blocks_4.eachLayer(function(layer) {
+            var context = {
+                feature: layer.feature,
+                variables: {}
+            };
+            layer.bindTooltip((exp_label_Blocks_4_eval_expression(context) !== null?String('<div style="color: #323232; font-size: 10pt; font-family: \'Liberation Sans\', sans-serif;">' + exp_label_Blocks_4_eval_expression(context)) + '</div>':''), {permanent: true, offset: [-0, -16], className: 'css_Blocks_4'});
+            labels.push(layer);
+            totalMarkers += 1;
+              layer.added = true;
+              addLabel(layer, i);
+              i++;
+        });
+        var i = 0;
+        layer_Productionareas_5.eachLayer(function(layer) {
+            var context = {
+                feature: layer.feature,
+                variables: {}
+            };
+            layer.bindTooltip((exp_label_Productionareas_5_eval_expression(context) !== null?String('<div style="color: #323232; font-size: 20pt; font-family: \'Liberation Sans\', sans-serif;">' + exp_label_Productionareas_5_eval_expression(context)) + '</div>':''), {permanent: true, offset: [-0, -16], className: 'css_Productionareas_5'});
+            labels.push(layer);
+            totalMarkers += 1;
+              layer.added = true;
+              addLabel(layer, i);
+              i++;
+        });
+        var i = 0;
+        layer_Codlingtraps_6.eachLayer(function(layer) {
+            var context = {
+                feature: layer.feature,
+                variables: {}
+            };
+            layer.bindTooltip((layer.feature.properties['Name'] !== null?String('<div style="color: #323232; font-size: 12pt; font-family: \'Liberation Sans\', sans-serif;">' + layer.feature.properties['Name']) + '</div>':''), {permanent: true, offset: [-0, -16], className: 'css_Codlingtraps_6'});
+            labels.push(layer);
+            totalMarkers += 1;
+              layer.added = true;
+              addLabel(layer, i);
+              i++;
+        });
+        resetLabels([layer_Blocks_4,layer_Productionareas_5,layer_Codlingtraps_6]);
+        map.on("zoomend", function(){
+            resetLabels([layer_Blocks_4,layer_Productionareas_5,layer_Codlingtraps_6]);
+        });
+        map.on("layeradd", function(){
+            resetLabels([layer_Blocks_4,layer_Productionareas_5,layer_Codlingtraps_6]);
+        });
+        map.on("layerremove", function(){
+            resetLabels([layer_Blocks_4,layer_Productionareas_5,layer_Codlingtraps_6]);
+        });
+        </script>
     </body>
 </html>
